@@ -1,0 +1,405 @@
+//Start region "Константы" 
+$min_width: 600px;
+$middle_width: 900px;
+$large_width: 1200px;
+//End region "Константы" 
+
+
+//Start region "Миксины"
+//Миксин адаптивности
+@mixin respond-to($media) {
+  @if $media == planshets {
+    @media only screen and (min-width: $middle_width) and (max-width: $large_width) { @content; }
+  }
+  @else if $media == phones {
+    @media only screen and (min-width: $min_width) and (max-width: $middle_width) { @content; }
+    @media only screen and (max-width: $min_width)  { @content; }
+  }
+}
+//Миксин смещения вправо элементов списка
+@mixin margin_right($position, $offset)
+{
+    @if $position == 2n
+    {
+      &:nth-of-type(2n+1)
+      {
+        margin-right: $offset;
+      }
+    }
+    @else if $position == 3n
+    {
+      &:nth-of-type(3n+1)
+      {
+        margin-right: $offset;
+      }
+    }
+    @else if $position == 4n
+    {
+      &:nth-of-type(4n+1)
+      {
+        margin-right: $offset;
+      }
+    }
+    
+}
+//Миксин "border_news"
+@mixin border($position)
+{
+  @if $position == n
+  {
+      &:nth-of-type(2) .border-top
+      {
+        border-top: 1px solid black;
+      }
+  }
+    @else if $position == 2n
+    {
+      &:nth-of-type(3n+1) .border-top
+      {
+        border-top: 1px solid black;
+      }
+    }
+    @else if $position == 3n
+    {
+      &:nth-of-type(4n+1) .border-top
+      {
+        border-top: 1px solid black;
+      }
+    }
+}
+//Миксин градиента
+@mixin gradient($from-color, $to-color, $angel) {
+    background-image: linear-gradient($angel, $from-color, $to-color); 
+    //background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from($from-color), to($to-color));
+    background-image: -webkit-linear-gradient($angel, $from-color, $to-color); 
+    background-image:    -moz-linear-gradient($angel, $from-color, $to-color);
+    background-image:     -ms-linear-gradient($angel, $from-color, $to-color);
+    background-image:      -o-linear-gradient($angel, $from-color, $to-color);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='$from-color', EndColorStr='$to-color')";
+}
+//Миксин тени текста
+@mixin text-shadow($x,$y,$z,$color){
+  -webkit-text-shadow: $x $y $z $color;
+     -moz-text-shadow: $x $y $z $color;
+          text-shadow: $x $y $z $color;
+}
+//Миксин обрезки текста
+@mixin text-overflow()
+{
+    display:block;
+    overflow:hidden;
+    white-space:nowrap;
+    width:100%;
+    -moz-binding:url("xml/moz_elipsis.xml#ellipsis");
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+}
+//End region "Миксины"
+
+//Start region "Классы"
+// Убирает все стили с a href, растягивает по осям
+%simple_href
+{
+  color: black;
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+//Крупный текст(заголовки)
+%large_text
+{
+  text-transform: uppercase;
+  font-weight: bold;
+}
+//Поля формы
+%form_field
+{
+  width: 100%;
+  box-sizing: border-box;
+}
+//End region "Классы"
+
+html
+{
+    min-width: $min_width;
+}
+
+#content {
+
+    //Start region "Шапка сайта"
+  	#top
+  	{
+  		    padding-top: 70px;
+          padding-bottom: 47px;
+		      background-color: rgb(31,40,51);
+
+  		.logo
+  		{
+  			background: url(../images/logo.png) no-repeat;
+  			width: 280px;
+  			height: 75px;
+  			float: left;
+  		}
+      .slogan
+      {
+      font-size: 25px;
+      padding-top: 20px;
+      color: white;
+      float: left;
+      width: 40%;
+      @include text-shadow(0.5px, 0.866px, 0px, rgb( 0, 0, 0 ));
+      }
+
+  	}
+
+    //End region "Шапка сайта"
+    
+    //Start region "Новости сайта"
+  	#news
+	  {
+      padding-bottom: 5px;
+		  .news_item
+		  {
+        padding: 15px 0px 15px 0px;
+        margin-right: 39px;
+        float: left;
+        width: 31%;
+        @include margin_right(3n,0px);
+        @include border(3n);
+        @include border(n);
+        @include respond-to(planshets) 
+        { 
+          width: 47%;
+          margin-right: 45px;
+          @include margin_right(3n,45px);
+          @include margin_right(2n,0px);
+          @include border(2n);
+        };
+        @include respond-to(phones) 
+        { 
+          width: 100%;
+          .border-top
+          {
+            border-top: 1px solid black;
+          }
+        };
+        .border-top
+        {
+          position: absolute;
+          width: 100%;
+          margin-top: -15px;
+        }
+        .news_image
+        {
+          width: 120px;
+          height: 120px;
+          float: left;
+          margin-bottom: 15px;
+        }
+        .news_body
+        {
+          float: left;
+          width: 59%;
+          padding-left: 20px;
+          height: 175px;
+          overflow: hidden;
+          margin-bottom: 15px;
+          @include respond-to(phones) 
+          {
+            height: inherit;
+            width: 73%;
+          }; 
+        }
+        .news_title
+        {
+          font-size: 18px;
+          font-weight: bold;
+          padding-bottom: 10px;
+        }
+        .read_more
+        {
+          clear: both;
+          display: block;
+          line-height: 18px;
+          font-size: 14px;
+          color: white;
+          text-transform: uppercase;
+          font-weight: bold;
+          text-align: center;
+          width: 150px;
+          
+          @include gradient(rgb( 179, 8, 0 ), rgb( 255, 14, 0 ),90deg);
+          @include text-shadow(0.5px, 0.866px, 0px, rgb( 0, 0, 0 ));
+          &:hover
+          {
+            @include gradient(rgb( 179, 8, 0 ), rgb( 255, 14, 0 ),-90deg);
+          }
+        }
+		  }
+      a
+      {
+        &:hover
+        {
+          color: rgb( 0, 49, 98 );
+        }
+        @extend %simple_href;
+        @include text-overflow();
+      }
+		
+	  }
+    //End region "Новости сайта"
+    
+    //Start region "Акции сайта"
+  	#offers
+  	{
+        background-color: rgb(54,62,72);
+        padding-bottom: 50px;
+        .article_item
+        {
+          float: left;
+          margin-right: 45px;
+          margin-top: 25px;
+          background-color:black;
+          width: 246px;
+          height: 128px;
+          @include margin_right(4n,0px);
+          @include respond-to(planshets) 
+          {
+            width: 240px;
+            @include margin_right(4n,45px);
+            @include margin_right(3n,0px);
+          };
+          @include respond-to(phones) 
+          {
+            width: 237px;
+            @include margin_right(4n,0px);
+            @include margin_right(3n,45px);
+            @include margin_right(2n,0px);
+          };
+
+          .img_container
+          {
+            width: 100%;
+            height: 100%;
+            &:hover 
+            {
+              opacity:0.6;
+            }
+          }
+          a
+          {
+            @extend %simple_href;
+          }
+        }
+  	}
+
+    //End region "Акции сайта"
+    
+    //Start region "Контакты сайта"
+    #contacts
+    {
+      padding-top: 20px;
+      padding-bottom: 30px;
+      background-color: rgb(31,40,51);
+      .contact_info
+      {
+        float: left;
+        width: 200px;
+        margin-right: 145px;
+        @include respond-to(phones) {margin-right: 80px;}
+        .contact_type
+        {
+          font-weight: bold;
+        }
+        li
+        {
+          color: white;
+          font-size: 14px;
+          line-height: 23px;
+        }
+        a
+        {
+          color: white;
+          &:hover
+          {
+            color: red;
+          }
+        }
+      }
+      .contact_feedback
+      {
+        .contact_form
+        {
+          background-color: rgb(54,62,72);
+          padding: 10px;
+          margin-top: 7px;
+          overflow: auto;
+          input
+          {
+            display: block;
+          }
+          input[type="email"]
+          {
+            background-color: white;
+            height: 40px;
+            margin-bottom: 10px;
+            @extend %form_field;
+          }
+          textarea
+          {
+            background-color: white;
+            height: 67px;
+            margin-bottom: 8px;
+            line-height: 13px;
+            @extend %form_field;
+          }
+          input[type="submit"]
+          {
+            color: white;
+            font-size: 18px;
+            float: right;
+            width: 218px;
+            line-height: 39px;
+            height: 37px;
+            @extend %large_text;
+            @include gradient(rgb( 179, 8, 0 ), rgb( 255, 14, 0 ),90deg);
+            @include text-shadow(0.5px, 0.866px, 0px, rgb( 0, 0, 0 ));
+          }
+        }
+      }
+    }
+    //End region "Контакты сайта"
+
+    //Start region "Общие стили контента"
+	  .container
+  	{
+  		width: 1120px;
+  		margin: 0px auto;
+  		padding-left: 40px;
+  		padding-right: 40px;
+  		overflow: hidden;
+      position: relative;
+  		@include respond-to(planshets) { width: 820px;  };
+  		@include respond-to(phones) { width: 520px; };
+  	}
+  	.container_title
+  	{
+      padding-top: 38px;
+      color: red;
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 40px;
+      @include text-shadow(0.5px, 0.866px, 0px, rgb( 0, 0, 0 ));
+  	}
+    .yellow_title
+    {
+      font-size: 24px;
+      line-height: 32px;
+      font-weight: bold;
+      color: rgb(255,180,0);
+      @include text-shadow(0.5px, 0.866px, 0px, rgb( 0, 0, 0 ));
+    }
+    //End region "Общие стили контента"
+}
